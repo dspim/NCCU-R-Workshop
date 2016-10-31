@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EDA with R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="EDA with R">
+  <meta name="author" content="Ben Chen">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012-dsp/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012-dsp/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012-dsp/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="libraries/frameworks/io2012-dsp/js/jquery-1.7.min.js"></script>
+  <!-- <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> -->
+  <script data-main="libraries/frameworks/io2012-dsp/js/slides" 
+    src="libraries/frameworks/io2012-dsp/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>EDA with R</h1>
+    <h2>智庫驅動</h2>
+    <p>Ben Chen<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>今日重點!!!</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>畫圖～</h3>
+
+<h3>ggplot2</h3>
+
+<h3>需要的套件</h3>
+
+<pre><code>library(ggplot2)
+library(data.table)
+library(dplyr)
+library(reshape2)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-2" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>ggplot2 簡介</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-3" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>ggplot2簡介</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>2015年，最受歡迎的R套件之一</li>
+<li>R環境下的繪圖套件</li>
+<li>取自 “The Grammar of Graphics” (Leland Wilkinson, 2005)</li>
+<li>設計理念
+
+<ul>
+<li>採用圖層系統</li>
+<li>用抽象的概念來控制圖形，避免細節繁瑣</li>
+<li>圖形美觀</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-4" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>The Anatomy of a Plot</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><img src='./img/anatomy.png' width=900 align='center'></img></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-5" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>ggplot2核心</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>注意事項
+
+<ul>
+<li>使用 data.frame 儲存資料 (不可以丟 matrix 物件)</li>
+<li>使用 long format (利用reshape2將資料轉換成 1 row = 1 observation)</li>
+</ul></li>
+<li>基本語法
+
+<ul>
+<li>ggplot 描述 data 從哪來</li>
+<li>aes 描述圖上的元素跟 data 之類的對應關係</li>
+<li>geom_xxx 描述要畫圖的類型及相關調整的參數</li>
+<li>常用的類型諸如：geom_bar, geom_points, geom_line, geom_polygon</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-6" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>一切從讀檔開始 (CSV)</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r"># 讀檔起手式
+ubike = read.csv(&#39;ubikeweatherutf8.csv&#39;) #請輸入正確的檔案路徑
+# 讀檔進階招式
+ubike = read.csv(&#39;檔案路徑&#39;, 
+          colClasses = c(&quot;factor&quot;,&quot;integer&quot;,&quot;integer&quot;,&quot;factor&quot;,&quot;factor&quot;,
+                         &quot;numeric&quot;,&quot;numeric&quot;,&quot;integer&quot;,&quot;numeric&quot;,&quot;integer&quot;,
+                         &quot;integer&quot;,&quot;numeric&quot;,&quot;numeric&quot;, &quot;integer&quot;,&quot;integer&quot;,
+                         &quot;numeric&quot;,&quot;numeric&quot;,&quot;numeric&quot;, &quot;numeric&quot;,&quot;numeric&quot;,
+                         &quot;numeric&quot;))
+# 讀檔大絕招
+ubike = fread(&#39;檔案路徑&#39;,
+          data.table = FALSE,
+          colClasses = c(&quot;factor&quot;,&quot;integer&quot;,&quot;integer&quot;,&quot;factor&quot;,
+                        &quot;factor&quot;,&quot;numeric&quot;, &quot;numeric&quot;, &quot;integer&quot;,
+                        &quot;numeric&quot;, &quot;integer&quot;,&quot;integer&quot;,&quot;numeric&quot;,
+                        &quot;numeric&quot;, &quot;integer&quot;,&quot;integer&quot;,&quot;numeric&quot;,
+                        &quot;numeric&quot;,&quot;numeric&quot;, &quot;numeric&quot;,&quot;numeric&quot;,
+                        &quot;numeric&quot;))
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-7" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>請輸入正確的檔案路徑</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-8" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>將欄位名稱換成中文</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">colnames(ubike) &lt;- 
+  c(&quot;日期&quot;, &quot;時間&quot;, &quot;場站代號&quot;, &quot;場站區域&quot;, &quot;場站名稱&quot;, 
+  &quot;緯度&quot;, &quot;經度&quot;, &quot;總停車格&quot;, &quot;平均車輛數&quot;, &quot;最大車輛數&quot;, 
+  &quot;最小車輛數&quot;, &quot;車輛數標準差&quot;, &quot;平均空位數&quot;, &quot;最大空位數&quot;, 
+  &quot;最小空位數&quot;, &quot;空位數標準差&quot;, &quot;平均氣溫&quot;, &quot;溼度&quot;, 
+  &quot;氣壓&quot;, &quot;最大風速&quot;, &quot;降雨量&quot;)
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-9" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>單一數值：Histogram</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-10" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Histogram</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">thm &lt;- theme(text=element_text(size=20,family=&quot;STHeiti&quot;)) # 控制字體與大小
+# STHeiti是只有Mac才有的字體
+ggplot(ubike) +
+  geom_histogram(aes(x = 最大風速, y=..count..))+thm
+</code></pre>
+
+<p><img src="assets/fig/wind1-1.png" title="plot of chunk wind1" alt="plot of chunk wind1" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-11" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Histogram</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(ubike) +
+  geom_histogram(aes(x = 最大風速, y=..density..))+thm
+</code></pre>
+
+<p><img src="assets/fig/wind2-1.png" title="plot of chunk wind2" alt="plot of chunk wind2" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-12" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Histogram</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(ubike) +
+  geom_histogram(aes(x = 最大風速, y=..density..,fill=..count..))+thm
+</code></pre>
+
+<p><img src="assets/fig/wind3-1.png" title="plot of chunk wind3" alt="plot of chunk wind3" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-13" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Histogram + Density</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(ubike,aes(x = 最大風速)) +
+  geom_histogram(aes(y=..density..,fill=..count..))+
+  geom_density()+thm
+</code></pre>
+
+<p><img src="assets/fig/wind4-1.png" title="plot of chunk wind4" alt="plot of chunk wind4" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-14" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>量化 v.s. 量化：Scatter Plot</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-15" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>繪圖之前的整理資料</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>文山區各站點在&quot;2015-02&quot;的平均溼度 vs. 平均雨量</h3>
+
+<pre><code class="r">x3 &lt;- filter(ubike, grepl(&quot;2015-02&quot;, 日期, fixed = TRUE), 場站區域 == &quot;文山區&quot;) %&gt;%
+  group_by(場站名稱) %&gt;% 
+  summarise(平均降雨量 = mean(降雨量), 平均溼度 = mean(溼度))
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-16" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Scatter Plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(x3) +
+  geom_point(aes(x = 平均溼度, y = 平均降雨量),size=5) + #size控制點的大小
+  thm
+</code></pre>
+
+<p><img src="assets/fig/ubike.site.wet.rainfall2-1.png" title="plot of chunk ubike.site.wet.rainfall2" alt="plot of chunk ubike.site.wet.rainfall2" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-17" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Grouped Scatter Plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(x3) +
+  # 放在aes裡的colour和size可依資料調整顏色和大小
+  geom_point(aes(x = 平均溼度, y = 平均降雨量, colour = 場站名稱,size=平均降雨量))+
+  # 限制大小
+  scale_size(range=c(5,10)) +  
+  thm
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-18" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Grouped Scatter Plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/ubike.site.wet.rainfall3-1.png" title="plot of chunk ubike.site.wet.rainfall3" alt="plot of chunk ubike.site.wet.rainfall3" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-19" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>量化 v.s. 量化：Line Chart</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-20" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>WorldPhones</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code>##      N.Amer Europe Asia S.Amer Oceania
+## 1951  45939  21574 2876   1815    1646
+## 1956  60423  29990 4708   2568    2366
+## 1957  64721  32510 5230   2695    2526
+## 1958  68484  35218 6662   2845    2691
+## 1959  71799  37598 6856   3000    2868
+## 1960  76036  40341 8220   3145    3054
+## 1961  79831  43173 9053   3338    3224
+##      Africa Mid.Amer
+## 1951     89      555
+## 1956   1411      733
+## 1957   1546      773
+## 1958   1663      836
+## 1959   1769      911
+## 1960   1905     1008
+## 1961   2005     1076
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-21" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>每年亞洲的電話數量</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code>ggplot(WorldPhones,aes(x=?????,y=Asia))......
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-22" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>哪裏不對？</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">class(WorldPhones)
+</code></pre>
+
+<pre><code>## [1] &quot;matrix&quot;
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-23" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>data.frame</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">WP.df=as.data.frame(WorldPhones)
+WP.df$year &lt;- rownames(WP.df)
+class(WP.df)
+</code></pre>
+
+<pre><code>## [1] &quot;data.frame&quot;
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-24" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Line Chart???</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(WP.df,aes(x=year,y=Asia))+geom_line()
+</code></pre>
+
+<pre><code>## geom_path: Each group consist of only one observation. Do you need to adjust the group aesthetic?
+</code></pre>
+
+<p><img src="assets/fig/wp4%20-1.png" alt="plot of chunk wp4 "> </p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-25" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Should be Number</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">str(WP.df)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    7 obs. of  8 variables:
+##  $ N.Amer  : num  45939 60423 64721 68484 71799 ...
+##  $ Europe  : num  21574 29990 32510 35218 37598 ...
+##  $ Asia    : num  2876 4708 5230 6662 6856 ...
+##  $ S.Amer  : num  1815 2568 2695 2845 3000 ...
+##  $ Oceania : num  1646 2366 2526 2691 2868 ...
+##  $ Africa  : num  89 1411 1546 1663 1769 ...
+##  $ Mid.Amer: num  555 733 773 836 911 ...
+##  $ year    : chr  &quot;1951&quot; &quot;1956&quot; &quot;1957&quot; &quot;1958&quot; ...
+</code></pre>
+
+<pre><code class="r">WP.df$year=as.numeric(WP.df$year)
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-26" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Line Chart!!!</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(WP.df,aes(x=year,y=Asia))+
+  geom_line()+thm
+</code></pre>
+
+<p><img src="assets/fig/wp6-1.png" title="plot of chunk wp6" alt="plot of chunk wp6" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-27" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Line Chart and Scatter Ploet</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(WP.df,aes(x=year,y=Asia))+
+  geom_line(size=2)+ #size控制線的寬度或點的大小
+  geom_point(size=5)+thm
+</code></pre>
+
+<p><img src="assets/fig/wp7-1.png" title="plot of chunk wp7" alt="plot of chunk wp7" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-28" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>How to plot multiple line?</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>Wide format</h3>
+
+<!-- html table generated in R 3.2.2 by xtable 1.8-0 package -->
+
+<!-- Mon Nov 30 08:10:28 2015 -->
+
+<table border=1>
+<tr> <th>  </th> <th> N.Amer </th> <th> Europe </th> <th> Asia </th> <th> S.Amer </th> <th> Oceania </th> <th> Africa </th> <th> Mid.Amer </th> <th> year </th>  </tr>
+  <tr> <td align="right"> 1951 </td> <td align="right"> 45939.00 </td> <td align="right"> 21574.00 </td> <td align="right"> 2876.00 </td> <td align="right"> 1815.00 </td> <td align="right"> 1646.00 </td> <td align="right"> 89.00 </td> <td align="right"> 555.00 </td> <td align="right"> 1951.00 </td> </tr>
+  <tr> <td align="right"> 1956 </td> <td align="right"> 60423.00 </td> <td align="right"> 29990.00 </td> <td align="right"> 4708.00 </td> <td align="right"> 2568.00 </td> <td align="right"> 2366.00 </td> <td align="right"> 1411.00 </td> <td align="right"> 733.00 </td> <td align="right"> 1956.00 </td> </tr>
+  <tr> <td align="right"> 1957 </td> <td align="right"> 64721.00 </td> <td align="right"> 32510.00 </td> <td align="right"> 5230.00 </td> <td align="right"> 2695.00 </td> <td align="right"> 2526.00 </td> <td align="right"> 1546.00 </td> <td align="right"> 773.00 </td> <td align="right"> 1957.00 </td> </tr>
+  <tr> <td align="right"> 1958 </td> <td align="right"> 68484.00 </td> <td align="right"> 35218.00 </td> <td align="right"> 6662.00 </td> <td align="right"> 2845.00 </td> <td align="right"> 2691.00 </td> <td align="right"> 1663.00 </td> <td align="right"> 836.00 </td> <td align="right"> 1958.00 </td> </tr>
+  <tr> <td align="right"> 1959 </td> <td align="right"> 71799.00 </td> <td align="right"> 37598.00 </td> <td align="right"> 6856.00 </td> <td align="right"> 3000.00 </td> <td align="right"> 2868.00 </td> <td align="right"> 1769.00 </td> <td align="right"> 911.00 </td> <td align="right"> 1959.00 </td> </tr>
+  <tr> <td align="right"> 1960 </td> <td align="right"> 76036.00 </td> <td align="right"> 40341.00 </td> <td align="right"> 8220.00 </td> <td align="right"> 3145.00 </td> <td align="right"> 3054.00 </td> <td align="right"> 1905.00 </td> <td align="right"> 1008.00 </td> <td align="right"> 1960.00 </td> </tr>
+  <tr> <td align="right"> 1961 </td> <td align="right"> 79831.00 </td> <td align="right"> 43173.00 </td> <td align="right"> 9053.00 </td> <td align="right"> 3338.00 </td> <td align="right"> 3224.00 </td> <td align="right"> 2005.00 </td> <td align="right"> 1076.00 </td> <td align="right"> 1961.00 </td> </tr>
+   </table>
+
+<p>\[\Downarrow\]</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-29" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h3>Long format</h3>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">library(reshape2)
+WP.long=melt(WP.df,id=&#39;year&#39;) #id是將保留的欄位名稱
+colnames(WP.long)=c(&#39;year&#39;,&#39;area&#39;,&#39;number&#39;)
+</code></pre>
+
+<!-- html table generated in R 3.2.2 by xtable 1.8-0 package -->
+
+<!-- Mon Nov 30 08:10:28 2015 -->
+
+<table border=1>
+<tr> <th>  </th> <th> year </th> <th> area </th> <th> number </th>  </tr>
+  <tr> <td align="right"> 1 </td> <td align="right"> 1951.00 </td> <td> N.Amer </td> <td align="right"> 45939.00 </td> </tr>
+  <tr> <td align="right"> 2 </td> <td align="right"> 1956.00 </td> <td> N.Amer </td> <td align="right"> 60423.00 </td> </tr>
+  <tr> <td align="right"> 3 </td> <td align="right"> 1957.00 </td> <td> N.Amer </td> <td align="right"> 64721.00 </td> </tr>
+  <tr> <td align="right"> 4 </td> <td align="right"> 1958.00 </td> <td> N.Amer </td> <td align="right"> 68484.00 </td> </tr>
+  <tr> <td align="right"> 5 </td> <td align="right"> 1959.00 </td> <td> N.Amer </td> <td align="right"> 71799.00 </td> </tr>
+  <tr> <td align="right"> 6 </td> <td align="right"> 1960.00 </td> <td> N.Amer </td> <td align="right"> 76036.00 </td> </tr>
+  <tr> <td align="right"> 7 </td> <td align="right"> 1961.00 </td> <td> N.Amer </td> <td align="right"> 79831.00 </td> </tr>
+  <tr> <td align="right"> 8 </td> <td align="right"> 1951.00 </td> <td> Europe </td> <td align="right"> 21574.00 </td> </tr>
+  <tr> <td align="right"> 9 </td> <td align="right"> 1956.00 </td> <td> Europe </td> <td align="right"> 29990.00 </td> </tr>
+  <tr> <td align="right"> 10 </td> <td align="right"> 1957.00 </td> <td> Europe </td> <td align="right"> 32510.00 </td> </tr>
+  <tr> <td align="right"> 11 </td> <td align="right"> 1958.00 </td> <td> Europe </td> <td align="right"> 35218.00 </td> </tr>
+  <tr> <td align="right"> 12 </td> <td align="right"> 1959.00 </td> <td> Europe </td> <td align="right"> 37598.00 </td> </tr>
+  <tr> <td align="right"> 13 </td> <td align="right"> 1960.00 </td> <td> Europe </td> <td align="right"> 40341.00 </td> </tr>
+  <tr> <td align="right"> 14 </td> <td align="right"> 1961.00 </td> <td> Europe </td> <td align="right"> 43173.00 </td> </tr>
+  <tr> <td align="right"> 15 </td> <td align="right"> 1951.00 </td> <td> Asia </td> <td align="right"> 2876.00 </td> </tr>
+  <tr> <td align="right"> 16 </td> <td align="right"> 1956.00 </td> <td> Asia </td> <td align="right"> 4708.00 </td> </tr>
+  <tr> <td align="right"> 17 </td> <td align="right"> 1957.00 </td> <td> Asia </td> <td align="right"> 5230.00 </td> </tr>
+  <tr> <td align="right"> 18 </td> <td align="right"> 1958.00 </td> <td> Asia </td> <td align="right"> 6662.00 </td> </tr>
+  <tr> <td align="right"> 19 </td> <td align="right"> 1959.00 </td> <td> Asia </td> <td align="right"> 6856.00 </td> </tr>
+  <tr> <td align="right"> 20 </td> <td align="right"> 1960.00 </td> <td> Asia </td> <td align="right"> 8220.00 </td> </tr>
+  <tr> <td align="right"> 21 </td> <td align="right"> 1961.00 </td> <td> Asia </td> <td align="right"> 9053.00 </td> </tr>
+  <tr> <td align="right"> 22 </td> <td align="right"> 1951.00 </td> <td> S.Amer </td> <td align="right"> 1815.00 </td> </tr>
+  <tr> <td align="right"> 23 </td> <td align="right"> 1956.00 </td> <td> S.Amer </td> <td align="right"> 2568.00 </td> </tr>
+  <tr> <td align="right"> 24 </td> <td align="right"> 1957.00 </td> <td> S.Amer </td> <td align="right"> 2695.00 </td> </tr>
+  <tr> <td align="right"> 25 </td> <td align="right"> 1958.00 </td> <td> S.Amer </td> <td align="right"> 2845.00 </td> </tr>
+  <tr> <td align="right"> 26 </td> <td align="right"> 1959.00 </td> <td> S.Amer </td> <td align="right"> 3000.00 </td> </tr>
+  <tr> <td align="right"> 27 </td> <td align="right"> 1960.00 </td> <td> S.Amer </td> <td align="right"> 3145.00 </td> </tr>
+  <tr> <td align="right"> 28 </td> <td align="right"> 1961.00 </td> <td> S.Amer </td> <td align="right"> 3338.00 </td> </tr>
+  <tr> <td align="right"> 29 </td> <td align="right"> 1951.00 </td> <td> Oceania </td> <td align="right"> 1646.00 </td> </tr>
+  <tr> <td align="right"> 30 </td> <td align="right"> 1956.00 </td> <td> Oceania </td> <td align="right"> 2366.00 </td> </tr>
+  <tr> <td align="right"> 31 </td> <td align="right"> 1957.00 </td> <td> Oceania </td> <td align="right"> 2526.00 </td> </tr>
+  <tr> <td align="right"> 32 </td> <td align="right"> 1958.00 </td> <td> Oceania </td> <td align="right"> 2691.00 </td> </tr>
+  <tr> <td align="right"> 33 </td> <td align="right"> 1959.00 </td> <td> Oceania </td> <td align="right"> 2868.00 </td> </tr>
+  <tr> <td align="right"> 34 </td> <td align="right"> 1960.00 </td> <td> Oceania </td> <td align="right"> 3054.00 </td> </tr>
+  <tr> <td align="right"> 35 </td> <td align="right"> 1961.00 </td> <td> Oceania </td> <td align="right"> 3224.00 </td> </tr>
+  <tr> <td align="right"> 36 </td> <td align="right"> 1951.00 </td> <td> Africa </td> <td align="right"> 89.00 </td> </tr>
+  <tr> <td align="right"> 37 </td> <td align="right"> 1956.00 </td> <td> Africa </td> <td align="right"> 1411.00 </td> </tr>
+  <tr> <td align="right"> 38 </td> <td align="right"> 1957.00 </td> <td> Africa </td> <td align="right"> 1546.00 </td> </tr>
+  <tr> <td align="right"> 39 </td> <td align="right"> 1958.00 </td> <td> Africa </td> <td align="right"> 1663.00 </td> </tr>
+  <tr> <td align="right"> 40 </td> <td align="right"> 1959.00 </td> <td> Africa </td> <td align="right"> 1769.00 </td> </tr>
+  <tr> <td align="right"> 41 </td> <td align="right"> 1960.00 </td> <td> Africa </td> <td align="right"> 1905.00 </td> </tr>
+  <tr> <td align="right"> 42 </td> <td align="right"> 1961.00 </td> <td> Africa </td> <td align="right"> 2005.00 </td> </tr>
+  <tr> <td align="right"> 43 </td> <td align="right"> 1951.00 </td> <td> Mid.Amer </td> <td align="right"> 555.00 </td> </tr>
+  <tr> <td align="right"> 44 </td> <td align="right"> 1956.00 </td> <td> Mid.Amer </td> <td align="right"> 733.00 </td> </tr>
+  <tr> <td align="right"> 45 </td> <td align="right"> 1957.00 </td> <td> Mid.Amer </td> <td align="right"> 773.00 </td> </tr>
+  <tr> <td align="right"> 46 </td> <td align="right"> 1958.00 </td> <td> Mid.Amer </td> <td align="right"> 836.00 </td> </tr>
+  <tr> <td align="right"> 47 </td> <td align="right"> 1959.00 </td> <td> Mid.Amer </td> <td align="right"> 911.00 </td> </tr>
+  <tr> <td align="right"> 48 </td> <td align="right"> 1960.00 </td> <td> Mid.Amer </td> <td align="right"> 1008.00 </td> </tr>
+  <tr> <td align="right"> 49 </td> <td align="right"> 1961.00 </td> <td> Mid.Amer </td> <td align="right"> 1076.00 </td> </tr>
+   </table>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-30" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Multiple Line</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(WP.long,aes(x=year,y=number,group=area,color=area))+ # gruop按照不同區域劃線
+  geom_line(size=1.5)+
+  geom_point(size=5)+thm
+</code></pre>
+
+<p><img src="assets/fig/wp11-1.png" title="plot of chunk wp11" alt="plot of chunk wp11" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-31" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>質化 v.s. 量化：Bar Chart</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-32" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>讀取檔案</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">pixnet=read.csv(&#39;train.csv&#39;,stringsAsFactors = FALSE)
+</code></pre>
+
+<ul>
+<li>2014-11-01 至 2014-11-30 期間，10000 筆隨機取樣的台灣地區網站訪客的瀏覽紀錄</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-33" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>欄位說明</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>url_hash - 去識別後的部落格文章 url</li>
+<li>resolution - 瀏覽裝置的螢幕解析度</li>
+<li>browser - 瀏覽裝置的瀏覽器</li>
+<li>os - 瀏覽裝置的作業系統</li>
+<li>device_marketing - 瀏覽裝置的產品型號</li>
+<li>device_brand - 瀏覽裝置的品牌名稱</li>
+<li>cookie_pta - 去識別化的瀏覽者代碼</li>
+<li>date - 瀏覽日期</li>
+<li>author_id - 文章作者 ID 去識別碼</li>
+<li>category_id - 文章分類</li>
+<li>referrer_venue - 訪客來源（網域）</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-34" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Bar Chart</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(pixnet,aes(x=referrer_venue))+
+  geom_bar(stat=&#39;bin&#39;)+thm # stat=&#39;bin&#39;算個數
+</code></pre>
+
+<p><img src="assets/fig/pix1-1.png" title="plot of chunk pix1" alt="plot of chunk pix1" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-35" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>兩種類別</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ub2=filter(ubike, 場站區域==&#39;中和區&#39;,時間==8) %&gt;% 
+  mutate(is.rain=降雨量&gt;1) %&gt;%
+  mutate(is.rain=factor(is.rain, levels=c(FALSE, TRUE), 
+                        labels = c(&quot;晴天&quot;,&quot;雨天&quot;))) %&gt;%
+  select(日期,  平均空位數, 場站名稱, is.rain,總停車格) %&gt;%
+  group_by(場站名稱,  is.rain) %&gt;%
+  summarise(use_rate=mean(平均空位數/總停車格)) 
+head(ub2)
+</code></pre>
+
+<pre><code>## Source: local data frame [6 x 3]
+## Groups: 場站名稱 [3]
+## 
+##         場站名稱 is.rain  use_rate
+##           (fctr)  (fctr)     (dbl)
+## 1 捷運永安市場站    晴天 0.6671052
+## 2 捷運永安市場站    雨天 0.6483044
+## 3       秀山國小    晴天 0.4966519
+## 4       秀山國小    雨天 0.4436588
+## 5       中和公園    晴天 0.6363115
+## 6       中和公園    雨天 0.5917228
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-36" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>兩種類別</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">las2 &lt;- theme(axis.text.x = element_text(angle = 90, hjust = 1),
+              text=element_text(size=20,family=&quot;STHeiti&quot;)) #控制字的方向
+ggplot(ub2,aes(x=場站名稱,y=use_rate,fill=is.rain))+
+  geom_bar(stat=&#39;identity&#39;)+
+  las2 # stat=&#39;identity&#39;以表格的值做為bar的高度
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-37" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>兩種類別: stack</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><img src="assets/fig/ubar1-1.png" title="plot of chunk ubar1" alt="plot of chunk ubar1" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-38" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>兩種類別: dodge</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(ub2,aes(x=場站名稱,y=use_rate,fill=is.rain))+
+  geom_bar(stat=&#39;identity&#39;,position = &#39;dodge&#39;)+las2 #dodge類別並排
+</code></pre>
+
+<p><img src="assets/fig/ubar2-1.png" title="plot of chunk ubar2" alt="plot of chunk ubar2" style="display: block; margin: auto;" /></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-39" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Pie Chart: Bar Chart變形</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>整理資料</h3>
+
+<pre><code class="r">pix=data.frame(table(pixnet$referrer_venue)) #table可以算個類別個數
+colnames(pix)=c(&#39;入口網站&#39;,&#39;數量&#39;)
+pix[5,2]=pix[5,2]+pix[1,2]
+pix=pix[-1,]
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-40" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Pie Chart: Bar Chart變形</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><img src="assets/fig/pix3-1.png" alt="plot of chunk pix3"> </p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-41" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Pie Chart: Bar Chart變形</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">ggplot(pix,aes(x=&quot;&quot;,y=數量,fill=入口網站))+
+  geom_bar(stat=&#39;identity&#39;,width=1)+
+  coord_polar(&#39;y&#39;)+
+  geom_text(aes(y = 數量*0.5+ c(0, cumsum(數量)[-length(數量)]), 
+                label = paste(round(數量/sum(數量),3)*100,&#39;%&#39;,sep=&quot;&quot;)),
+            size=7)+
+  theme(axis.title.y = element_blank(),
+        axis.text.x=element_blank(),
+        panel.grid=element_blank(),
+        text=element_text(size=20,family=&quot;STHeiti&quot;))
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-42" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>The Grammer of Graphics</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-43" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>ggplot2基本架構</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>資料 (data) 和映射 (mapping)</li>
+<li>幾何對象 (<font color='red'>geom</font>etric)</li>
+<li>座標尺度 (<font color='red'>scale</font>)</li>
+<li>統計轉換 (<font color='red'>stat</font>istics)</li>
+<li>座標系統 (<font color='red'>coord</font>inante)</li>
+<li>圖層 (layer)</li>
+<li>刻面 (<font color='red'>facet</font>)</li>
+<li>主題 (<font color='red'>theme</font>)</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-44" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Data and Mapping</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(data=WP.df)+geom_line(aes(x=year,y=Asia))
+</code></pre>
+
+<h3>Data is Data</h3>
+
+<h3>mapping: aes(x=...,y=...)</h3>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-45" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2><font color='red'>geom</font>etric</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>geom_line and geom_point</h3>
+
+<pre><code class="r">ggplot(WP.df,aes(x=year,y=Asia))+
+  geom_line(size=2)+geom_point(size=5)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-5-1.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-46" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2><font color='red'>scale</font></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(x3) +
+  geom_point(aes(x =平均溼度, y=平均降雨量,colour=場站名稱,size=平均降雨量))+
+  scale_size(range=c(5,10)) +thm
+</code></pre>
+
+<p><img src="assets/fig/scale1-1.png" title="plot of chunk scale1" alt="plot of chunk scale1" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-47" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2><font color='red'>stat</font>istics</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"> ggplot(pressure,aes(x=temperature,y=pressure))+
+  geom_point()+
+  stat_smooth()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-48" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2><font color='red'>coord</font>inante</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <pre><code class="r">ggplot(pix,aes(x=&quot;&quot;,y=數量,fill=入口網站))+
+  geom_bar(stat=&#39;identity&#39;)+thm
+</code></pre>
+
+<p><img src="assets/fig/pix5-1.png" alt="plot of chunk pix5"> </p>
+
+</div>
+<div style='float:right;width:48%;' class='centered'>
+  <pre><code class="r">ggplot(pix,aes(x=&quot;&quot;,y=數量,fill=入口網站))+
+  geom_bar(stat=&#39;identity&#39;,width=1)+
+  coord_polar(&#39;y&#39;)+thm
+</code></pre>
+
+<p><img src="assets/fig/pix6-1.png" alt="plot of chunk pix6"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-49" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2><font color='red'>facet</font></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">rain &lt;- filter(ubike, grepl(&quot;2015-02&quot;, 日期, fixed = TRUE), 場站區域 == &quot;中和區&quot;) %&gt;%
+  group_by(日期,場站名稱) %&gt;% 
+  summarise(每日平均降雨量 = mean(降雨量))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-50" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2><font color='red'>facet</font></h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Line Chart</h3>
+
+<pre><code class="r">ggplot(rain) + thm+las2+
+  geom_line(aes(x = 日期, y = 每日平均降雨量,group=場站名稱,colour=場站名稱),size=2)
+</code></pre>
+
+<p><img src="assets/fig/ubike.site.wet.rainfall13-1.png" title="plot of chunk ubike.site.wet.rainfall13" alt="plot of chunk ubike.site.wet.rainfall13" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-51" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Line Chart in Facets</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(rain) +thm+las2+facet_wrap(~場站名稱,nrow=2)+ # facet_wrap將各站的情況分開畫
+  geom_line(aes(x = 日期, y = 每日平均降雨量,group=場站名稱,colour=場站名稱),size=2)
+</code></pre>
+
+<p><img src="assets/fig/ubike.site.wet.rainfall14-1.png" title="plot of chunk ubike.site.wet.rainfall14" alt="plot of chunk ubike.site.wet.rainfall14" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-52" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>可以存檔嗎？</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-53" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>存檔</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code># 畫完圖之後，再存檔~~
+ggsave(&#39;檔案名稱&#39;)
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-54" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>學習資源</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-55" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><a href="http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">ggplot2 cheat sheet from RStudio Inc.</a></li>
+<li><a href="http://docs.ggplot2.org/current/index.html">ggplot2 官方文件</a></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-56" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>本週目標</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>環境設定</h3>
+
+<ul>
+<li>建立可以使用R 的環境</li>
+<li>了解R 的使用界面</li>
+</ul>
+
+<h3>學習R 語言</h3>
+
+<ul>
+<li>透過實際的範例學習R 語言
+
+<ul>
+<li>讀取資料</li>
+<li>選取資料</li>
+<li>敘述統計量與視覺化</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-57" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>掌握心法後，如何自行利用R 解決問題</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>了解自己的需求</li>
+<li>詢問關鍵字與函數
+
+<ul>
+<li>歡迎來信 <a href="mailto:benjamin0901@gmail.com">benjamin0901@gmail.com</a> 或其他教師</li>
+<li>多多交流
+
+<ul>
+<li><a href="http://www.meetup.com/Taiwan-R">Taiwan R User Group</a>，mailing list: <a href="mailto:Taiwan-useR-Group-list@meetup.com">Taiwan-useR-Group-list@meetup.com</a></li>
+<li>ptt R_Language版</li>
+<li><a href="https://groups.google.com/forum/#!forum/taiwanruser">R軟體使用者論壇</a></li>
+</ul></li>
+<li><code>sos</code>套件，請見Demo</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-58" style="background-image: url('libraries/frameworks/io2012-dsp/images/dsp-page.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Team Project</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='今日重點!!!'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='ggplot2 簡介'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='ggplot2簡介'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='The Anatomy of a Plot'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='ggplot2核心'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='一切從讀檔開始 (CSV)'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='請輸入正確的檔案路徑'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='將欄位名稱換成中文'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='單一數值：Histogram'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Histogram'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Histogram'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Histogram'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Histogram + Density'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='量化 v.s. 量化：Scatter Plot'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='繪圖之前的整理資料'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Scatter Plot'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Grouped Scatter Plot'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Grouped Scatter Plot'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='量化 v.s. 量化：Line Chart'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='WorldPhones'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='每年亞洲的電話數量'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='哪裏不對？'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='data.frame'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Line Chart???'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Should be Number'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Line Chart!!!'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Line Chart and Scatter Ploet'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='How to plot multiple line?'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Long format'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Multiple Line'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='質化 v.s. 量化：Bar Chart'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='讀取檔案'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='欄位說明'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Bar Chart'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='兩種類別'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='兩種類別'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='兩種類別: stack'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='兩種類別: dodge'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Pie Chart: Bar Chart變形'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Pie Chart: Bar Chart變形'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='Pie Chart: Bar Chart變形'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='The Grammer of Graphics'>
+         42
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='ggplot2基本架構'>
+         43
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='Data and Mapping'>
+         44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='<font color='red'>geom</font>etric'>
+         45
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='<font color='red'>scale</font>'>
+         46
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title='<font color='red'>stat</font>istics'>
+         47
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=48 title='<font color='red'>coord</font>inante'>
+         48
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=49 title='<font color='red'>facet</font>'>
+         49
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=50 title='<font color='red'>facet</font>'>
+         50
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=51 title='Line Chart in Facets'>
+         51
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=52 title='可以存檔嗎？'>
+         52
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=53 title='存檔'>
+         53
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=54 title='學習資源'>
+         54
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=55 title='NA'>
+         55
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=56 title='本週目標'>
+         56
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=57 title='掌握心法後，如何自行利用R 解決問題'>
+         57
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=58 title='Team Project'>
+         58
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quick R Introduction</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="generator" content="pandoc" />
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" media="all" href="RBasic_files/ioslides-13.5.1/fonts/fonts.css">
+
+  <link rel="stylesheet" media="all" href="RBasic_files/ioslides-13.5.1/theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="RBasic_files/ioslides-13.5.1/theme/css/phone.css">
+
+  <base target="_blank">
+
+  <script type="text/javascript">
+    var SLIDE_CONFIG = {
+      // Slide settings
+      settings: {
+                title: 'Quick R Introduction',
+                        useBuilds: true,
+        usePrettify: true,
+        enableSlideAreas: true,
+        enableTouch: true,
+              },
+
+      // Author information
+      presenters: [
+            {
+        name:  'Johnson Hsieh (<a href="mailto:johnson@dsp.im">johnson@dsp.im</a>)' ,
+        company: '',
+        gplus: '',
+        twitter: '',
+        www: '',
+        github: ''
+      },
+            ]
+    };
+  </script>
+
+  <style type="text/css">
+
+    b, strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    slides > slide {
+      -webkit-transition: all 0.4s ease-in-out;
+      -moz-transition: all 0.4s ease-in-out;
+      -o-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .auto-fadein {
+      -webkit-transition: opacity 0.6s ease-in;
+      -webkit-transition-delay: 0.4s;
+      -moz-transition: opacity 0.6s ease-in 0.4s;
+      -o-transition: opacity 0.6s ease-in 0.4s;
+      transition: opacity 0.6s ease-in 0.4s;
+      opacity: 0;
+    }
+
+  </style>
+
+  <link rel="stylesheet" href="css/dsp.css" type="text/css" />
+
+
+</head>
+
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="title-slide segue nobackground">
+        <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+          </hgroup>
+  </slide>
+
+<slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch01：為何要學 R 語言？</h2></hgroup><article  id="ch01-r-">
+
+</article></slide><slide class=''><hgroup><h2>R 是專門為資料分析而設計的程式語言</h2></hgroup><article  id="r-" class="smaller centered">
+
+<img src='img/statician_10521919-655x280.jpg' style='width: 960px'></img>
+
+<h3>
+
+R 可以執行大多數的統計計算、機器學習、資料採礦方法
+
+</h3>
+
+<p>取自 <a href='http://goo.gl/CkXlvY' title=''>http://goo.gl/CkXlvY</a></p>
+
+</article></slide><slide class=''><hgroup><h2>免費、開源、豐沛的社群資源</h2></hgroup><article  class="smaller columns-2 centered">
+
+<img src='img/fig_8_cran.png' style='height: 400px'></img>
+
+<h3>
+
+很容易擴充和客製化
+
+</h3>
+
+<p>取自 <a href='http://goo.gl/AwfHLx' title=''>http://goo.gl/AwfHLx</a></p>
+
+<img src='img/r-integration-1.png' style='height: 400px'></img>
+
+<h3>
+
+很容易和其他工具做整合
+
+</h3>
+
+<p>取自 <a href='http://goo.gl/jvNnG3' title=''>http://goo.gl/jvNnG3</a></p>
+
+</article></slide><slide class=''><hgroup><h2>R 可以輸出高品質的視覺化</h2></hgroup><article  id="r-" class="smaller centered">
+
+<p><img src='img/flights_sml.jpg' style='width: 960px'></img></p>
+
+<p>取自 <a href='http://goo.gl/q1NX26' title=''>http://goo.gl/q1NX26</a></p>
+
+</article></slide><slide class=''><hgroup><h2>課程目標</h2></hgroup><article >
+
+<ul style="font-size: 120%">
+
+<li>
+
+建立 R 的使用環境
+
+</li>
+
+<li>
+
+熟悉 R 語言基礎操作
+
+</li>
+
+<li>
+
+了解 R 語言的物件的結構
+
+</li>
+
+<li>
+
+體會 R 語言的流程控制
+
+</li>
+
+<li>
+
+學習 R 語言的資料整理
+
+</li>
+
+<li>
+
+確立 R 語言的資料爬析概念
+
+</li>
+
+</ul>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch02：建立 R 的使用環境</h2></hgroup><article  id="ch02-r-">
+
+</article></slide><slide class=''><hgroup><h2>傢俬準備好</h2></hgroup><article  class="columns-2">
+
+<h3>環境安裝</h3>
+
+<ul>
+<li>主程式：<a href='https://www.r-project.org/' title=''>R</a>（R-3.2.2 以上版本）</li>
+<li>編輯界面：<a href='https://www.rstudio.com/products/rstudio/' title=''>RStudio IDE</a>（0.99.473 以上版本）</li>
+<li><a href='https://github.com/dspim/R/wiki/R-&amp;-RStudio-Troubleshooting-Guide' title=''>疑難排解指南</a> <br> <br> <br></li>
+</ul>
+
+<h3>RStudio 界面說明</h3>
+
+<ul>
+<li>程式碼編輯區</li>
+<li>命令列區</li>
+<li>環境資訊區</li>
+<li>檔案系統區</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>熟悉 RStudio 的 <strong>命令列</strong> 界面</h2></hgroup><article  id="-rstudio---">
+
+<h3>程式的<strong>輸入</strong>、<strong>輸出</strong>、<strong>中斷</strong></h3>
+
+<ul>
+<li>左下角的當符號 <code>&gt;</code> 表示可以輸入指令</li>
+<li>輸入 <code>1 + 1</code> 後按下 <strong>Enter</strong>，檢查螢幕輸出</li>
+<li>輸入 <code>1 +</code> 後按下 <strong>Enter</strong>，檢查螢幕輸出 <br> 最左下角的開頭變成 <code>+</code> 表示尚未輸入完成，應繼續輸入</li>
+<li>按下 <strong>ESC</strong>，會中斷執行中的程式 (左下角回復成 <code>&gt;</code> 開頭)</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>熟悉 RStudio 的 <strong>程式碼編輯</strong> 界面</h2></hgroup><article  id="-rstudio---">
+
+<h3>停留時間最多的區域</h3>
+
+<ul>
+<li><strong>New File -&gt; R Script -&gt; Untiled1.R</strong></li>
+<li>在程式碼編輯區中輸入 <code>1 + 1</code> 後按下 <strong>Control + Enter</strong>，檢查 命令列區</li>
+<li>在程式碼編輯區中輸入 <code>1 +</code> 後按下 <strong>Control + Enter</strong>，檢查 命令列區</li>
+<li>在命令列區按下 <strong>ESC</strong> 中斷程式</li>
+</ul>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch03 今天學完，你一定會用R做資料整理</h2></hgroup><article  id="ch03-r">
+
+</article></slide><slide class=''><hgroup><h2>先別想，複製貼上就是了</h2></hgroup><article >
+
+<pre class = 'prettyprint lang-r'>dat1 &lt;- data.frame(date=c(&quot;11/29&quot;,&quot;11/30&quot;,&quot;12/01&quot;,&quot;12/02&quot;,&quot;12/03&quot;,&quot;12/04&quot;,&quot;12/05&quot;),
+                   weekday=c(&quot;Sun&quot;, &quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;))
+dat1 # print R object</pre>
+
+<pre >   date weekday
+1 11/29     Sun
+2 11/30     Mon
+3 12/01     Tue
+4 12/02     Wed
+5 12/03     Thu
+6 12/04     Fri
+7 12/05     Sat</pre>
+
+<pre class = 'prettyprint lang-r'>dat1[1, 1]  # 取值
+dat1[, 1]   
+dat1[1:2,] </pre>
+
+</article></slide><slide class=''><hgroup><h2>先別想，複製貼上就是了</h2></hgroup><article  id="-1">
+
+<pre class = 'prettyprint lang-r'>dat2 &lt;- data.frame(date=c(&quot;11/29&quot;,&quot;11/30&quot;,&quot;12/01&quot;,&quot;12/02&quot;,&quot;12/03&quot;,&quot;12/04&quot;,&quot;12/05&quot;),
+                   temp=c(17, 18, 24, 20, 21, 22, 24))
+dat2 # print R object</pre>
+
+<pre >   date temp
+1 11/29   17
+2 11/30   18
+3 12/01   24
+4 12/02   20
+5 12/03   21
+6 12/04   22
+7 12/05   24</pre>
+
+<pre class = 'prettyprint lang-r'>dat2[, 2]
+dat2[, 2] * 2   
+dat2[, 2] + c(1, 0, -0.5, 2, 3, -2, 0.5) </pre>
+
+</article></slide><slide class=''><hgroup><h2>先別想，複製貼上就是了</h2></hgroup><article  id="-2">
+
+<pre class = 'prettyprint lang-r'>dat2[dat2$temp&lt;20,]</pre>
+
+<pre >   date temp
+1 11/29   17
+2 11/30   18</pre>
+
+<pre class = 'prettyprint lang-r'>dat2[grepl(&quot;11&quot;, dat2$date), ]</pre>
+
+<pre >   date temp
+1 11/29   17
+2 11/30   18</pre>
+
+<pre class = 'prettyprint lang-r'>cbind(dat1,temp=dat2$temp)[dat2$temp&lt;20,]</pre>
+
+<pre >   date weekday temp
+1 11/29     Sun   17
+2 11/30     Mon   18</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch04：基礎教學 - 敘述句與數列</h2></hgroup><article  id="ch04---">
+
+</article></slide><slide class=''><hgroup><h2>敘述句</h2></hgroup><article  class="columns-2">
+
+<pre class = 'prettyprint lang-r'>1</pre>
+
+<pre >[1] 1</pre>
+
+<pre class = 'prettyprint lang-r'>2</pre>
+
+<pre >[1] 2</pre>
+
+<pre class = 'prettyprint lang-r'>1; 2</pre>
+
+<pre >[1] 1</pre>
+
+<pre >[1] 2</pre>
+
+<br>
+
+<p>
+
+<br>
+
+<p>
+
+<p>
+
+<h3>筆記</h3>
+
+<ul>
+<li>灰底的區塊為程式碼 (輸入)，[1] 為運算結果 (輸出)</li>
+<li>敘述句以<strong>斷行 (Enter)</strong> 或<strong>分號 ( ; )</strong> 作結尾</li>
+<li>未完成的敘述句，命令列開頭會變成 <code>+</code></li>
+<li>可以用 <strong>Esc</strong> 中斷敘述句</li>
+<li>R 會把單引號 <code>&#39;apple&#39;</code> 或雙引號 <code>&quot;book&quot;</code> 所包覆的敘述當成字串</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>敘述句2</h2></hgroup><article  id="2" class="columns-2">
+
+<pre class = 'prettyprint lang-r'># 基礎運算
+1 + 2 + 3</pre>
+
+<pre >[1] 6</pre>
+
+<pre class = 'prettyprint lang-r'>1 +       2 + 3</pre>
+
+<pre >[1] 6</pre>
+
+<pre class = 'prettyprint lang-r'>x &lt;- 10
+y &lt;- 4
+(x + y) / 2 # 簡單的公式運算</pre>
+
+<pre >[1] 7</pre>
+
+<br>
+
+<p>
+
+<p>
+
+<p><br></p>
+
+<h3>筆記</h3>
+
+<ul>
+<li>基本數學運算符號 (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, &#8230;)</li>
+<li>空白 (<strong>space</strong>) 不影響程式執行</li>
+<li>箭號 (<code>&lt;-</code>) 表示賦值，把箭號右邊的結果指向到R物件</li>
+<li>井號 (<strong>#</strong>) 表示註解，使得該行不執行運算</li>
+<li>在RStudio中，想要一次註解多行可用 <strong>ctrl + shift + c</strong></li>
+<li>在命令列中按 <strong>ctrl + l</strong> 可以清除當前畫面</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>最基礎的物件：數值型向量 (數列)</h2></hgroup><article  id="-" class="columns-2">
+
+<pre class = 'prettyprint lang-r'># basic expression of integer vector
+c(1, 2, 3, 4)</pre>
+
+<pre >[1] 1 2 3 4</pre>
+
+<pre class = 'prettyprint lang-r'># simple expression
+1:4</pre>
+
+<pre >[1] 1 2 3 4</pre>
+
+<pre class = 'prettyprint lang-r'>4:1</pre>
+
+<pre >[1] 4 3 2 1</pre>
+
+<br>
+
+<p>
+
+<p>
+
+<h3>筆記</h3>
+
+<ul>
+<li>以 <code>c(...)</code> 表示 (c 取自combine之意), 整個函數內容以 <code>()</code>包括起來，元素以逗號分隔。</li>
+<li>連續整數向量可以利用 <code>:</code> (冒號) 簡記，譬如數列 (1, 2, 3, 4) 在 R 語言中可利用 <code>1:4</code> 簡記</li>
+<li>也可以使用 <code>4:1</code> 的簡記方式來產生 (4, 3, 2, 1) 的向量</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>如何生成有序的數值向量</h2></hgroup><article  class="columns-2">
+
+<pre class = 'prettyprint lang-r'>seq(1, 4)</pre>
+
+<pre >[1] 1 2 3 4</pre>
+
+<pre class = 'prettyprint lang-r'>seq(1, 9, by = 2) # 間隔為2</pre>
+
+<pre >[1] 1 3 5 7 9</pre>
+
+<pre class = 'prettyprint lang-r'>seq(1, 9, length.out = 5) # 分割長度為5</pre>
+
+<pre >[1] 1 3 5 7 9</pre>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>筆記</h3>
+
+<ul>
+<li>除了冒號簡記法外，可以透過<code>seq</code>函數生成有規則的數值向量(序列)<br/></li>
+<li>在<code>seq()</code> 函數中按 <strong>tab</strong> 鍵觀察有哪些參數可以使用</li>
+<li><code>by</code> 表示數列間隔，預設為1</li>
+<li><code>length.out</code> 表示數列長度</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>小挑戰</h2></hgroup><article >
+
+<ul>
+<li>利用簡記法列出 1 ~ 10的數列</li>
+<li>利用 <code>seq</code> 函數列出偶數數列: 2, 4, 6, 8, 10</li>
+<li>觀察 <code>seq(1, 10, length.out=5)</code> 的輸出結果
+
+<p>
+
+</p>
+
+<p>
+
+</p>
+
+<p>
+
+</p>
+
+<p>
+
+</p>
+
+<p>
+
+</p>
+
+<p>
+
+</p></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article  id="section">
+
+<p>參考解答</p>
+
+<pre class = 'prettyprint lang-r'>1:10</pre>
+
+<pre > [1]  1  2  3  4  5  6  7  8  9 10</pre>
+
+<pre class = 'prettyprint lang-r'>seq(2, 10, by = 2)</pre>
+
+<pre >[1]  2  4  6  8 10</pre>
+
+<pre class = 'prettyprint lang-r'>seq(2, 10, length.out = 5)</pre>
+
+<pre >[1]  2  4  6  8 10</pre>
+
+<pre class = 'prettyprint lang-r'>seq(1, 10, length.out=5)</pre>
+
+<pre >[1]  1.00  3.25  5.50  7.75 10.00</pre>
+
+</div>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch05：基礎教學 - 數列的運算</h2></hgroup><article  id="ch05---">
+
+</article></slide><slide class=''><hgroup><h2>數列的運算</h2></hgroup><article  class="columns-2">
+
+<p>R的數列運算滿足 <strong>recycling properties</strong></p>
+
+<pre class = 'prettyprint lang-r'>c(1, 2, 3) * c(2, 2, 2)</pre>
+
+<pre >[1] 2 4 6</pre>
+
+<pre class = 'prettyprint lang-r'># shorter arguments are recycled
+1:3 * 2</pre>
+
+<pre >[1] 2 4 6</pre>
+
+<pre class = 'prettyprint lang-r'>c(0.5, 1.5, 2.5, 3.5) * c(2, 1)</pre>
+
+<pre >[1] 1.0 1.5 5.0 3.5</pre>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>小挑戰</h3>
+
+<p>向量的四則運算，請計算以下五位女藝人的BMI</p>
+
+<p>Hint: BMI = 體重 / (身高/100)^2</p>
+
+<pre class = 'prettyprint lang-r'>height &lt;- c(174, 158, 160, 168, 173)
+weight &lt;- c(52, 39, 42, 46, 48)</pre>
+
+<aside class='note'><section><pre class = 'prettyprint lang-r'>height &lt;- c(174, 158, 160, 168, 173)
+weight &lt;- c(52, 39, 42, 46, 48)
+weight/ (height/100)^2</pre>
+
+<pre >[1] 17.17532 15.62250 16.40625 16.29819 16.03796</pre></section></aside>
+
+</article></slide><slide class=''><hgroup><h2>向量的取值</h2></hgroup><article  class="columns-2">
+
+<ul>
+<li>在<code>[ ]</code> (中括號) 中輸入元素的位置進行取值</li>
+<li>使負號 (<code>-</code>) 移除給定位置元素 (反向選取)</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>x &lt;- c(174, 158, 160, 168, 173)
+x[1]           # 選取第1個位置的元素</pre>
+
+<pre >[1] 174</pre>
+
+<pre class = 'prettyprint lang-r'>x[c(1, 3)]     # 選取第1, 3個位置的元素</pre>
+
+<pre >[1] 174 160</pre>
+
+<pre class = 'prettyprint lang-r'>x[c(2, 3, 1)]  # 依序取值</pre>
+
+<pre >[1] 158 160 174</pre>
+
+<pre class = 'prettyprint lang-r'># 在[ ]中使用負號 (-) 做反向選取
+x[-1]</pre>
+
+<pre >[1] 158 160 168 173</pre>
+
+<pre class = 'prettyprint lang-r'>x[-c(1, 3, 4)]</pre>
+
+<pre >[1] 158 173</pre>
+
+</article></slide><slide class=''><hgroup><h2>向量的取值2</h2></hgroup><article  id="2" class="columns-2">
+
+<p>給定條件進行取值</p>
+
+<ul>
+<li>比較運算子(<code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>==</code>, <code>!=</code>)</li>
+<li>邏輯運算子 (<code>&amp;</code>, <code>|</code>)</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>x &gt; 160</pre>
+
+<pre >[1]  TRUE FALSE FALSE  TRUE  TRUE</pre>
+
+<pre class = 'prettyprint lang-r'># 使用比較運算子 加上 `which` 函數進行取值
+index &lt;- which(x &gt; 160) 
+index </pre>
+
+<pre >[1] 1 4 5</pre>
+
+<pre class = 'prettyprint lang-r'>x[index]</pre>
+
+<pre >[1] 174 168 173</pre>
+
+<pre class = 'prettyprint lang-r'># 指令壓縮，將指令寫在 [ ] 中，以達到縮短程式碼的功效
+x[which(x &gt; 160)]</pre>
+
+<pre >[1] 174 168 173</pre>
+
+<pre class = 'prettyprint lang-r'># 配合邏輯算子進行多條件的取值
+x[which(x &gt; 160 &amp; x &lt; 175)]</pre>
+
+<pre >[1] 174 168 173</pre>
+
+<pre class = 'prettyprint lang-r'># 可以省略 which
+x[x &gt; 160 &amp; x &lt; 175]</pre>
+
+<pre >[1] 174 168 173</pre>
+
+</article></slide><slide class=''><hgroup><h2>向量的取代</h2></hgroup><article  class="columns-2">
+
+<ul>
+<li>利用 <code>[ ]</code> (中括號) 與 <code>&lt;-</code> (箭號) 進行取代與新增元素</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>x &lt;- c(174, 158, 160, 168, 173)
+
+# 取代特定位置的元素
+x[2] &lt;- 158.5 # 取代x物件的第二個元素
+x</pre>
+
+<pre >[1] 174.0 158.5 160.0 168.0 173.0</pre>
+
+<pre class = 'prettyprint lang-r'>x[c(1, 5)] &lt;- 175 
+x</pre>
+
+<pre >[1] 175.0 158.5 160.0 168.0 175.0</pre>
+
+<p>
+
+<pre class = 'prettyprint lang-r'># 也可以用條件篩選做取代
+x[x &gt; 160] &lt;- 170 # 取代大於160的值為170
+x</pre>
+
+<pre >[1] 170.0 158.5 160.0 170.0 170.0</pre>
+
+</article></slide><slide class=''><hgroup><h2>向量新增</h2></hgroup><article  class="columns-2">
+
+<ul>
+<li>可用 <code>[ ]</code> (中括號) 與 <code>&lt;-</code> (箭號) 進行新增元素<br/></li>
+<li><code>NA</code> 為系統保留字，表示Not Available / Missing Values</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>x &lt;- c(174, 158, 160, 168, 173)
+# 在 [ ] 中新增元素
+x[6] &lt;- 168
+x</pre>
+
+<pre >[1] 174 158 160 168 173 168</pre>
+
+<pre class = 'prettyprint lang-r'>x[8] &lt;- 147
+x # 未指定的元素值預設為NA</pre>
+
+<pre >[1] 174 158 160 168 173 168  NA 147</pre>
+
+<pre class = 'prettyprint lang-r'>length(x) # 查看向量物件的長度</pre>
+
+<pre >[1] 8</pre>
+
+<pre class = 'prettyprint lang-r'>x[length(x) + 1] &lt;- 166 # 接續增加新元素</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch06：查詢說明檔</h2></hgroup><article  id="ch06">
+
+</article></slide><slide class=''><hgroup><h2>在 R 中查詢說明文件</h2></hgroup><article  id="-r-" class="columns-2">
+
+<p>各種自救措施</p>
+
+<pre class = 'prettyprint lang-r'>help.start()
+ab # 輸入`ab`後 按下tab
+?abs   # 等同於 help(abs)
+??abs 
+vignette()
+vignette(&quot;Introduction&quot;, &quot;Matrix&quot;)</pre>
+
+<br> <br>
+
+<p>
+
+<br> <br> <br> <br>
+
+<p>
+
+<p>
+
+<h3>筆記</h3>
+
+<ul>
+<li>help.start: 說明檔首頁</li>
+<li>自動完成 (tab鍵)：列出所有<code>ab</code>開頭的函數</li>
+<li>? (一個問號)：查詢特定函數的說明檔</li>
+<li>?? (兩個問號)：查詢包含特定關鍵字的說明檔</li>
+<li>apropos : 查詢包含特定關鍵字的函數</li>
+<li>example : 執行特定函數的使用範例</li>
+<li>vignette : 查詢R環境中各種介紹文件</li>
+</ul>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch07：資料測量的尺度</h2></hgroup><article  id="ch07">
+
+</article></slide><slide class=''><hgroup><h2>R 的資料形態分類</h2></hgroup><article  id="r-">
+
+<table class = 'rmdtable'>
+<tr class="header">
+<th align="left">資料衡量尺度</th>
+<th align="left">R變數形態</th>
+<th align="left">特性</th>
+<th align="left">範例</th>
+</tr>
+<tr class="odd">
+<td align="left">連續資料</td>
+<td align="left">numeric</td>
+<td align="left">數值</td>
+<td align="left">身高</td>
+</tr>
+<tr class="even">
+<td align="left">比例資料</td>
+<td align="left">numeric</td>
+<td align="left">比值</td>
+<td align="left">流失率</td>
+</tr>
+<tr class="odd">
+<td align="left">區間資料</td>
+<td align="left">numeric</td>
+<td align="left">大小距離</td>
+<td align="left">溫度</td>
+</tr>
+<tr class="even">
+<td align="left">順序資料</td>
+<td align="left">factor</td>
+<td align="left">優先順序</td>
+<td align="left">名次</td>
+</tr>
+<tr class="odd">
+<td align="left">名目資料</td>
+<td align="left">factor</td>
+<td align="left">類別</td>
+<td align="left">國家</td>
+</tr>
+<tr class="even">
+<td align="left">布林資料</td>
+<td align="left">logical</td>
+<td align="left">邏輯值</td>
+<td align="left">性別</td>
+</tr>
+<tr class="odd">
+<td align="left">文字資料</td>
+<td align="left">character</td>
+<td align="left">文字</td>
+<td align="left">電話號碼</td>
+</tr>
+</table>
+
+</article></slide><slide class=''><hgroup><h2>判斷 Logical</h2></hgroup><article  id="-logical">
+
+<p>產生自比較，或是使用<code>T</code>、<code>TRUE</code>、<code>F</code>或<code>FALSE</code>輸入</p>
+
+<pre class = 'prettyprint lang-r'>x &lt;- 1 # 賦值
+x &lt; 2</pre>
+
+<pre >[1] TRUE</pre>
+
+<pre class = 'prettyprint lang-r'>x &lt;= 1</pre>
+
+<pre >[1] TRUE</pre>
+
+</article></slide><slide class=''><hgroup><h2>字串 (Character)</h2></hgroup><article  id="-character" class="columns-2">
+
+<ul>
+<li>輸入的時候利用<code>&quot;</code>或<code>&#39;</code>來包覆要輸入的文字</li>
+<li>常用的Character處理函數</li>
+</ul>
+
+<p>字串的剪接：<code>paste</code></p>
+
+<pre class = 'prettyprint lang-r'>x &lt;- &quot;bubble&quot;
+y &lt;- &quot;bobble&quot;
+paste(x, y, sep=&quot;,&quot;)</pre>
+
+<pre >[1] &quot;bubble,bobble&quot;</pre>
+
+<p>字串的切割：<code>strsplit</code></p>
+
+<pre class = 'prettyprint lang-r'>strsplit(x, &quot;b&quot;)</pre>
+
+<pre >[[1]]
+[1] &quot;&quot;   &quot;u&quot;  &quot;&quot;   &quot;le&quot;</pre>
+
+<p>截取子字串：<code>substring</code></p>
+
+<pre class = 'prettyprint lang-r'>name1&lt;-&quot;郭雪芙&quot;
+substring(name1, 1, 1)</pre>
+
+<pre >[1] &quot;郭&quot;</pre>
+
+<p>計算字串長度：<code>nchar</code></p>
+
+<pre class = 'prettyprint lang-r'>nchar(name1) # 試著與 length 函數比較</pre>
+
+<pre >[1] 3</pre>
+
+</article></slide><slide class=''><hgroup><h2>小挑戰</h2></hgroup><article  id="-2">
+
+<ul>
+<li>取出金城武的姓</li>
+<li>取出字串 <code>a &lt;- &quot;2015-12-14&quot;</code> 的月份</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>解答</h2></hgroup><article >
+
+<pre class = 'prettyprint lang-r'># 取出金城武的
+name2&lt;-&quot;金城武&quot;
+substring(name2, 1, 2)</pre>
+
+<pre >[1] &quot;金城&quot;</pre>
+
+<pre class = 'prettyprint lang-r'># 取出字串 &quot;2015-12-14&quot; 的月份
+a &lt;- &quot;2015-12-14&quot;
+substring(a, 6, 7)</pre>
+
+<pre >[1] &quot;12&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>tmp &lt;- strsplit(a, &quot;-&quot;)
+tmp[[1]][2]</pre>
+
+<pre >[1] &quot;12&quot;</pre>
+
+</article></slide><slide class=''><hgroup><h2>Factor (類別)</h2></hgroup><article  id="factor-" class="columns-2">
+
+<p>如何處理名目變數?</p>
+
+<pre class = 'prettyprint lang-r'>x &lt;- c(&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;F&quot;)
+x</pre>
+
+<pre >[1] &quot;F&quot; &quot;M&quot; &quot;F&quot; &quot;F&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>x &lt;- factor(c(&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;F&quot;), levels=c(&quot;F&quot;,&quot;M&quot;))
+x</pre>
+
+<pre >[1] F M F F
+Levels: F M</pre>
+
+<pre class = 'prettyprint lang-r'>x &lt;- factor(c(&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;F&quot;), levels=c(&quot;F&quot;))
+levels(x)</pre>
+
+<pre >[1] &quot;F&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>as.integer(x)</pre>
+
+<pre >[1]  1 NA  1  1</pre>
+
+</article></slide><slide class=''><hgroup><h2>如何處理順序資料?</h2></hgroup><article >
+
+<pre class = 'prettyprint lang-r'>#農業社會 男尊女卑
+Argri &lt;- factor(c(&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;F&quot;), order=TRUE, levels=c(&quot;F&quot;,&quot;M&quot;))
+
+#阿美族 女尊男卑
+Amis &lt;- factor(c(&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;F&quot;), order=FALSE, levels=c(&quot;F&quot;,&quot;M&quot;))
+
+#應該要用
+Amis &lt;- factor(c(&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;F&quot;), order=TRUE, levels=c(&quot;M&quot;,&quot;F&quot;))</pre>
+
+</article></slide><slide class=''><hgroup><h2>換個例子</h2></hgroup><article >
+
+<pre class = 'prettyprint lang-r'>#舉一個認真的例子 - 班上一號到六號分別拿到A, B, C的級別
+rank=factor(c(&quot;C&quot;,&quot;A&quot;,&quot;B&quot;,&quot;B&quot;,&quot;C&quot;,&quot;C&quot;), order=TRUE, level=c(&quot;C&quot;,&quot;B&quot;,&quot;A&quot;))
+rank</pre>
+
+<pre >[1] C A B B C C
+Levels: C &lt; B &lt; A</pre>
+
+<pre class = 'prettyprint lang-r'>rank[1] &lt; rank[2]</pre>
+
+<pre >[1] TRUE</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch08: 資料型態的轉換</h2></hgroup><article  id="ch08-">
+
+</article></slide><slide class=''><hgroup><h2>向量有同質性 Vector</h2></hgroup><article  id="-vector">
+
+<p>Character &gt; Numeric &gt; Integer &gt; Logical</p>
+
+<pre class = 'prettyprint lang-r'>x &lt;- c(1, 2.0, &quot;3&quot;)
+x</pre>
+
+<pre >[1] &quot;1&quot; &quot;2&quot; &quot;3&quot;</pre>
+
+</article></slide><slide class=''><hgroup><h2>資料型態的轉換</h2></hgroup><article  class="columns-2">
+
+<ul>
+<li>利用以下函數自行轉換向量型態： <code>as.character</code>, <code>as.numeric</code>, <code>as.logical</code>。</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>as.numeric(&quot;2&quot;)</pre>
+
+<pre >[1] 2</pre>
+
+<pre class = 'prettyprint lang-r'>x &lt;- c(1, 2.0, &quot;3&quot;)
+as.numeric(x)</pre>
+
+<pre >[1] 1 2 3</pre>
+
+<pre class = 'prettyprint lang-r'>y &lt;- c(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;2&quot;, &quot;a&quot;)
+as.numeric(y)</pre>
+
+<pre >Warning: 強制變更過程中產生了 NA</pre>
+
+<pre >[1]  1  2  3  2 NA</pre>
+
+<ul>
+<li><code>NA</code>代表Not available，代表著<strong>missing value</strong></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>資料型態的轉換2</h2></hgroup><article  id="2" class="columns-2">
+
+<pre class = 'prettyprint lang-r'># 字串轉數字
+a1 &lt;- c(&quot;89&quot;, &quot;91&quot;, &quot;102&quot;)
+as.numeric(a1)</pre>
+
+<pre >[1]  89  91 102</pre>
+
+<pre class = 'prettyprint lang-r'># 布林轉數字
+a2 &lt;- c(TRUE, TRUE, FALSE)
+as.numeric(a2)</pre>
+
+<pre >[1] 1 1 0</pre>
+
+<pre class = 'prettyprint lang-r'># 數字轉布林
+a3 &lt;- c(-2, -1, 0, 1, 2) # 只有0會被轉成FALSE
+as.logical(a3)</pre>
+
+<pre >[1]  TRUE  TRUE FALSE  TRUE  TRUE</pre>
+
+<pre class = 'prettyprint lang-r'># 數字轉字串
+as.character(a3)</pre>
+
+<pre >[1] &quot;-2&quot; &quot;-1&quot; &quot;0&quot;  &quot;1&quot;  &quot;2&quot; </pre>
+
+<pre class = 'prettyprint lang-r'>z &lt;- c(1, 2, 3, 2, 3, 2, 1)
+as.character(z) # 字串</pre>
+
+<pre >[1] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;2&quot; &quot;3&quot; &quot;2&quot; &quot;1&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>factor(z) # 轉類別</pre>
+
+<pre >[1] 1 2 3 2 3 2 1
+Levels: 1 2 3</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch09: List 存放異質性資料的容器</h2></hgroup><article  id="ch09-list-">
+
+</article></slide><slide class=''><hgroup><h2>List</h2></hgroup><article  id="list">
+
+<pre class = 'prettyprint lang-r'>x1 &lt;- c(&quot;林志玲&quot;, 174, 52, TRUE)   # 所有元素都被轉換成字串
+x1</pre>
+
+<pre >[1] &quot;林志玲&quot; &quot;174&quot;    &quot;52&quot;     &quot;TRUE&quot;  </pre>
+
+<pre class = 'prettyprint lang-r'>x2 &lt;- list(&quot;林志玲&quot;, 174, 52, TRUE) # 保留資料型態
+str(x2)</pre>
+
+<pre >List of 4
+ $ : chr &quot;林志玲&quot;
+ $ : num 174
+ $ : num 52
+ $ : logi TRUE</pre>
+
+</article></slide><slide class=''><hgroup><h2>List 賦值/取值</h2></hgroup><article  id="list-" class="columns-2">
+
+<pre class = 'prettyprint lang-r'>x3 &lt;- list(name=c(&quot;林志玲&quot;, &quot;隋棠&quot;, &quot;蔡依林&quot;), 
+           height=c(174, 173, 158),
+           weight=c(52, 48, 39),
+           model=c(TRUE, TRUE, FALSE))
+
+x3[[1]]</pre>
+
+<pre >[1] &quot;林志玲&quot; &quot;隋棠&quot;   &quot;蔡依林&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>x3$name</pre>
+
+<pre >[1] &quot;林志玲&quot; &quot;隋棠&quot;   &quot;蔡依林&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>x3[[&quot;name&quot;]]</pre>
+
+<pre >[1] &quot;林志玲&quot; &quot;隋棠&quot;   &quot;蔡依林&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>names(x3)</pre>
+
+<pre >[1] &quot;name&quot;   &quot;height&quot; &quot;weight&quot; &quot;model&quot; </pre>
+
+<pre class = 'prettyprint lang-r'># names(x3) &lt;- c(&quot;Name&quot;, &quot;Height&quot;, &quot;Weight&quot;, &quot;Model&quot;)</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch10：DataFrame 資料表</h2></hgroup><article  id="ch10dataframe-">
+
+</article></slide><slide class=''><hgroup><h2>資料表 <code>data.frame</code></h2></hgroup><article  id="-data.frame">
+
+<ul>
+<li><code>data.frame</code> 是資料分析時最基本的物件</li>
+<li><code>R</code> 提供將外部資料轉成 <code>data.frame</code> 的功能</li>
+<li>透過<code>data.frame</code> 可以進行以下功能：
+
+<ul>
+<li>資料的整理</li>
+<li>圖形的繪製</li>
+<li>模型的配適與預測</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>世界上最常見的範例資料 <code>iris</code></h2></hgroup><article  id="-iris">
+
+<pre class = 'prettyprint lang-r'>data(&quot;iris&quot;)
+head(iris) # 列出前幾筆資料, 預設6筆</pre>
+
+<pre >  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa</pre>
+
+<pre class = 'prettyprint lang-r'>dim(iris)  # 列出資料表的 rows and columns</pre>
+
+<pre >[1] 150   5</pre>
+
+</article></slide><slide class=''><hgroup><h2>表格的取值 - 座標</h2></hgroup><article  id="---">
+
+<ul>
+<li>類似於向量取值，在中括號 <code>[i, j]</code> 中進行取值</li>
+<li>逗號的前後分別表示資料表的 row and column</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>iris[2, 3]</pre>
+
+<pre >[1] 1.4</pre>
+
+<pre class = 'prettyprint lang-r'>iris[1:6, 1:3]</pre>
+
+<pre >  Sepal.Length Sepal.Width Petal.Length
+1          5.1         3.5          1.4
+2          4.9         3.0          1.4
+3          4.7         3.2          1.3
+4          4.6         3.1          1.5
+5          5.0         3.6          1.4
+6          5.4         3.9          1.7</pre>
+
+</article></slide><slide class=''><hgroup><h2>表格的取值 - 列</h2></hgroup><article  id="---">
+
+<p>欲選取第i筆觀察資料時，使用 <code>[i, ]</code> 在column欄位留白</p>
+
+<pre class = 'prettyprint lang-r'>iris[2, ]</pre>
+
+<pre >  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+2          4.9           3          1.4         0.2  setosa</pre>
+
+<pre class = 'prettyprint lang-r'>iris[c(1, 51, 101),]</pre>
+
+<pre >    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+1            5.1         3.5          1.4         0.2     setosa
+51           7.0         3.2          4.7         1.4 versicolor
+101          6.3         3.3          6.0         2.5  virginica</pre>
+
+</article></slide><slide class=''><hgroup><h2>表格的取值 - 欄</h2></hgroup><article  id="---">
+
+<p>欲選取整欄資料時，有三種常用方法</p>
+
+<pre class = 'prettyprint lang-r'>iris[,1] # 欄位名稱未知
+iris$Sepal.Length # 已知欄位名稱
+iris[[&quot;Sepal.Length&quot;]] # 已知欄位名稱 </pre>
+
+<pre >  [1] 5.1 4.9 4.7 4.6 5.0 5.4 4.6 5.0 4.4 4.9 5.4 4.8 4.8 4.3 5.8 5.7 5.4
+ [18] 5.1 5.7 5.1 5.4 5.1 4.6 5.1 4.8 5.0 5.0 5.2 5.2 4.7 4.8 5.4 5.2 5.5
+ [35] 4.9 5.0 5.5 4.9 4.4 5.1 5.0 4.5 4.4 5.0 5.1 4.8 5.1 4.6 5.3 5.0 7.0
+ [52] 6.4 6.9 5.5 6.5 5.7 6.3 4.9 6.6 5.2 5.0 5.9 6.0 6.1 5.6 6.7 5.6 5.8
+ [69] 6.2 5.6 5.9 6.1 6.3 6.1 6.4 6.6 6.8 6.7 6.0 5.7 5.5 5.5 5.8 6.0 5.4
+ [86] 6.0 6.7 6.3 5.6 5.5 5.5 6.1 5.8 5.0 5.6 5.7 5.7 6.2 5.1 5.7 6.3 5.8
+[103] 7.1 6.3 6.5 7.6 4.9 7.3 6.7 7.2 6.5 6.4 6.8 5.7 5.8 6.4 6.5 7.7 7.7
+[120] 6.0 6.9 5.6 7.7 6.3 6.7 7.2 6.2 6.1 6.4 7.2 7.4 7.9 6.4 6.3 6.1 7.7
+[137] 6.3 6.4 6.0 6.9 6.7 6.9 5.8 6.8 6.7 6.7 6.3 6.5 6.2 5.9</pre>
+
+</article></slide><slide class=''><hgroup><h2>表格的取值 - 篩選</h2></hgroup><article  id="---">
+
+<p>利用條件式做篩選</p>
+
+<pre class = 'prettyprint lang-r'>iris[iris$Sepal.Length &gt; 5.5 &amp; iris$Species==&quot;setosa&quot;, ]</pre>
+
+<pre >   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+15          5.8         4.0          1.2         0.2  setosa
+16          5.7         4.4          1.5         0.4  setosa
+19          5.7         3.8          1.7         0.3  setosa</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Ch11: Pattern Matching and Replacement</h2></hgroup><article  id="ch11-pattern-matching-and-replacement">
+
+</article></slide><slide class=''><hgroup><h2>關鍵字的取代與查找 - <code>gsub</code></h2></hgroup><article  id="---gsub">
+
+<p><code>gsub(pattern, replacement, x)</code></p>
+
+<pre class = 'prettyprint lang-r'>year &lt;- c(&quot;民國99&quot;, &quot;民國100&quot;, &quot;民國101&quot;)
+gsub(&quot;民國&quot;, &quot;&quot;, year)</pre>
+
+<pre >[1] &quot;99&quot;  &quot;100&quot; &quot;101&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>as.numeric(gsub(&quot;民國&quot;, &quot;&quot;, year)) + 1911</pre>
+
+<pre >[1] 2010 2011 2012</pre>
+
+</article></slide><slide class=''><hgroup><h2>關鍵字的取代與查找 - <code>grep</code></h2></hgroup><article  id="---grep">
+
+<ul>
+<li><code>grep(pattern, x, value=FALSE)</code></li>
+<li><code>grepl(pattern, x)</code></li>
+<li><code>grep(pattern, x, value=TRUE)</code></li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>title &lt;- c(&quot;馬習會前交涉祕辛曝光&quot;, &quot;馬說明馬習會：公布逐字稿不可思議的透明&quot;, &quot;談22K政策朱立倫：不幸被企業濫用&quot;)
+grep(&quot;馬習會&quot;, title)</pre>
+
+<pre >[1] 1 2</pre>
+
+<pre class = 'prettyprint lang-r'>grepl(&quot;馬習會&quot;, title)</pre>
+
+<pre >[1]  TRUE  TRUE FALSE</pre>
+
+<pre class = 'prettyprint lang-r'>grep(&quot;馬習會&quot;, title, value = TRUE)</pre>
+
+<pre >[1] &quot;馬習會前交涉祕辛曝光&quot;                  
+[2] &quot;馬說明馬習會：公布逐字稿不可思議的透明&quot;</pre>
+
+</article></slide><slide class=''><hgroup><h2>關鍵字的取代與查找 - <code>gregexpr</code></h2></hgroup><article  id="---gregexpr">
+
+<pre class = 'prettyprint lang-r'>txt &lt;- c(&quot;名模林志玲身高有174公分，體重52公斤&quot;, &quot;女神蔡依林身高158公分，體重只有39公斤&quot;)
+matches &lt;- gregexpr(&quot;[0-9]+&quot;, txt)
+regmatches(txt, matches)</pre>
+
+<pre >[[1]]
+[1] &quot;174&quot; &quot;52&quot; 
+
+[[2]]
+[1] &quot;158&quot; &quot;39&quot; </pre>
+
+</article></slide><slide class=''><hgroup><h2>Recape</h2></hgroup><article  id="recape">
+
+<ul>
+<li>取代：<code>gsub</code></li>
+<li>查找位置：<code>grep(value=FALSE)</code>, <code>grep(value=TRUE)</code>, <code>grepl</code></li>
+<li>查找結果：<code>grepexpr</code></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>補充資料</h2></hgroup><article >
+
+<ul>
+<li><a href='https://github.com/wush978/DataScienceAndR' title=''>Learn R in R (Swirls)</a></li>
+<li><a href='https://en.wikibooks.org/wiki/R_Programming/Text_Processing' title=''>Text Processing (wikibooks)</a></li>
+<li><a href='https://www.datacamp.com/courses/free-introduction-to-r' title=''>Introduction to R (around 4 hours)</a></li>
+<li><a href='http://www.cookbook-r.com/' title=''>Cookbook for R</a></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>繼續學習之路</h2></hgroup><article >
+
+<ul>
+<li>了解自己的需求，詢問關鍵字與函數</li>
+<li><a href='http://www.meetup.com/Taiwan-R' title=''>Taiwan R User Group</a>，mailing list: <a href='mailto:Taiwan-useR-Group-list@meetup.com' title=''>Taiwan-useR-Group-list@meetup.com</a></li>
+<li><a href='https://www.ptt.cc/bbs/R_Language/index.html' title=''>ptt R_Language版</a></li>
+<li><a href='https://groups.google.com/forum/#!forum/taiwanruser' title=''>R軟體使用者論壇</a></li>
+<li><a href='http://stackoverflow.com/' title=''>StackOverflow</a></li>
+<li>歡迎來信 <a href='mailto:johnson@dsp.im' title=''>johnson@dsp.im</a> 或其他DSP優秀教師多多交流</li>
+</ul></article></slide>
+
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+<script src="RBasic_files/ioslides-13.5.1/js/modernizr.custom.45394.js"></script>
+<script src="RBasic_files/ioslides-13.5.1/js/prettify/prettify.js"></script>
+<script src="RBasic_files/ioslides-13.5.1/js/prettify/lang-r.js"></script>
+<script src="RBasic_files/ioslides-13.5.1/js/prettify/lang-yaml.js"></script>
+<script src="RBasic_files/ioslides-13.5.1/js/hammer.js"></script>
+<script src="RBasic_files/ioslides-13.5.1/js/slide-controller.js"></script>
+<script src="RBasic_files/ioslides-13.5.1/js/slide-deck.js"></script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+<!-- map slide visiblity events into shiny -->
+<script>
+  (function() {
+    if (window.jQuery) {
+       window.jQuery(document).on('slideleave', function(e) {
+         window.jQuery(e.target).trigger('hidden');
+      });
+       window.jQuery(document).on('slideenter', function(e) {
+         window.jQuery(e.target).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
